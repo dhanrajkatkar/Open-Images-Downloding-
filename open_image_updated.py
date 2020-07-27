@@ -33,21 +33,17 @@ def downnload_images(q, q1, total_images):
         response = get(url)
         status = str(response.status_code)
         size = len(response.content)    #Returns size in bytes
-        if size > 1024:
-            if status[0] == '2':
-                with open(filename, 'wb') as handler:
-                    handler.write(response.content)
-                data = (img, 0)
-            else:
-                data = (img, 1)
-            q1.put(data)
+        if status[0] == '2' and size > 1024:
+            with open(filename, 'wb') as handler:
+                handler.write(response.content)
+            data = (img, 0)
+        else:
+            data = (img, 1)
+        q1.put(data)
     q1.put(('a',2))
 
 
 def write_to_file(q):
-    # folder = 'E:/Cemtrex Labs/Open Images/ID'
-    # if not os.path.exists(folder_name):
-    #     os.makedirs(folder_name)
     filetxt = 'E:/Cemtrex Labs/Open Images/test_success.csv'
     file = 'E:/Cemtrex Labs/Open Images/test_fail.csv'
     while True:
